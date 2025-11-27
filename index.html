@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Heaven Entrance + Search + Hearts + Invite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(180deg, #bde6ff, #f8d9ff, #ffe8f4);
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+    }
+
+    /* ========== SCENE 1: HEAVEN ENTRANCE ========== */
+    #scene1 {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* CLOUDS */
+    .cloud {
+      position: absolute;
+      width: 260px;
+      height: 90px;
+      background: white;
+      opacity: 0.9;
+      border-radius: 60px;
+      filter: blur(1px);
+      animation: float 35s linear infinite;
+      box-shadow: 0 0 30px rgba(255,255,255,0.8);
+    }
+
+    .cloud::before, .cloud::after {
+      content:"";
+      position: absolute;
+      background: white;
+      width: 150px;
+      height: 110px;
+      border-radius: 50%;
+      top: -35px;
+      left: 40px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.8);
+    }
+
+    .cloud:nth-child(1){ top:10%; left:-350px; animation-duration:40s;}
+    .cloud:nth-child(2){ top:25%; left:-400px; animation-duration:48s;}
+    .cloud:nth-child(3){ top:38%; left:-330px; animation-duration:42s;}
+    .cloud:nth-child(4){ top:50%; left:-420px; animation-duration:50s;}
+    .cloud:nth-child(5){ top:62%; left:-370px; animation-duration:44s;}
+    .cloud:nth-child(6){ top:72%; left:-390px; animation-duration:46s;}
+    .cloud:nth-child(7){ top:15%; left:-310px; animation-duration:52s;}
+    .cloud:nth-child(8){ top:80%; left:-360px; animation-duration:45s;}
+
+    @keyframes float {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(150vw); }
+    }
+
+    /* DOOR AREA */
+    .door-wrapper {
+      position: relative;
+      width: 78vw;
+      max-width: 390px;
+      height: 70vh;
+      max-height: 600px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .door {
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(135deg, #ffffff, #ffe2f3, #ffd3f1);
+      border: 3px solid #ffb8ea;
+      border-radius: 20px;
+      box-shadow: 0 0 26px rgba(255,150,230,0.55);
+      transition: transform 1.7s ease;
+    }
+
+    .left { left: 0; transform-origin: left center; }
+    .right { right: 0; transform-origin: right center; }
+
+    .knock {
+      position: absolute;
+      top: -80px;
+      width: 100%;
+      text-align: center;
+      font-size: 30px;
+      font-family: 'Playfair Display', serif;
+      color: #ff2f91;
+      letter-spacing: 1px;
+      font-weight: 600;
+      animation: softGlow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes softGlow {
+      0% { opacity: 0.7; text-shadow: 0 0 6px rgba(255,70,160,0.3); }
+      50% { opacity: 1; text-shadow: 0 0 12px rgba(255,80,170,0.55); transform: scale(1.05); }
+      100% { opacity: 0.75; text-shadow: 0 0 6px rgba(255,70,160,0.3); }
+    }
+
+    /* MESSAGE SCREEN – FULL SIMPLE PAGE, NO BOX */
+    #messageScreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 25px 15px 30px;
+      text-align: center;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    #typeText {
+      font-family:'Dancing Script', cursive;
+      font-size:26px;
+      color:black;
+      line-height:1.5;
+      white-space:pre-wrap;
+      width:85%;
+      margin-top:40px;
+      margin-bottom:40px;
+    }
+
+    /* LIGHT SECTION (below paragraph) */
+    #lightSection {
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      margin-bottom:40px;
+    }
+
+    .title {
+      font-family:'Dancing Script', cursive;
+      font-size:28px;
+      color:#ff2f91;
+      margin-bottom:30px;
+    }
+
+    .switch-box {
+      width:160px;
+      height:80px;
+      background:white;
+      border-radius:50px;
+      box-shadow:0 0 18px rgba(0,0,0,0.15);
+      display:flex;
+      align-items:center;
+      padding:5px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .switch-toggle {
+      width:70px;
+      height:70px;
+      background:#ff9fd9;
+      border-radius:50%;
+      transition:0.3s;
+      box-shadow:0 0 12px rgba(255,100,180,0.6);
+    }
+
+    /* ========== SCENE 2: SEARCH PAGE ========== */
+    #searchScreen {
+      display: none;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      padding: 20px 10px;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    body.search-mode {
+      background: #f5f6fb;
+      overflow: auto;
+    }
+
+    /* Fake Google header */
+    .logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+    .logo span:nth-child(1) { color: #4285F4; }
+    .logo span:nth-child(2) { color: #EA4335; }
+    .logo span:nth-child(3) { color: #FBBC05; }
+    .logo span:nth-child(4) { color: #4285F4; }
+    .logo span:nth-child(5) { color: #34A853; }
+    .logo span:nth-child(6) { color: #EA4335; }
+
+    /* Search area */
+    .search-card {
+      background: white;
+      border-radius: 999px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .search-icon {
+      font-size: 18px;
+      margin-right: 8px;
+      opacity: 0.6;
+    }
+
+    #searchInput {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 15px;
+    }
+
+    .search-btn {
+      border: none;
+      background: #4285F4;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+
+    .hint-box {
+      margin-top: 10px;
+      font-size: 12px;
+      background: white;
+      border-radius: 10px;
+      padding: 8px 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hint-label {
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    .hint-text {
+      font-style: italic;
+      opacity: 0.9;
+    }
+
+    /* Result area */
+    .result-area {
+      margin-top: 26px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .small-label {
+      font-size: 12px;
+      color: #70757a;
+      margin-bottom: 4px;
+    }
+
+    .result-title {
+      font-size: 18px;
+      color: #1a0dab;
+      margin-bottom: 6px;
+    }
+
+    .result-link {
+      font-size: 12px;
+      color: #006621;
+      margin-bottom: 10px;
+      word-break: break-all;
+    }
+
+    .result-snippet {
+      font-size: 14px;
+      color: #202124;
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+
+    .read-more {
+      font-size: 13px;
+      color: #1a0dab;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .qualities {
+      margin-top: 10px;
+      padding-left: 18px;
+      font-size: 14px;
+      color: #202124;
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .qualities li {
+      margin-bottom: 6px;
+    }
+
+    .loading {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #5f6368;
+      display: none;
+    }
+
+    /* Rating section */
+    #ratingSection {
+      display: none;
+      margin-top: 24px;
+      padding: 14px 12px 18px;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+      text-align: center;
+    }
+
+    .rating-title {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .stars {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font-size: 26px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .star {
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      opacity: 0.7;
+    }
+
+    .star:hover {
+      transform: scale(1.2) translateY(-1px);
+      opacity: 1;
+    }
+
+    .rating-subtext {
+      font-size: 12px;
+      color: #777;
+    }
+
+    /* Popup modal */
+    #popupOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-box {
+      background: #ffffff;
+      padding: 18px 18px 14px;
+      border-radius: 16px;
+      max-width: 280px;
+      width: 80%;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .popup-message {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .popup-btn {
+      margin-top: 4px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      border: none;
+      background: #ff2f91;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ========== HEARTS PHASE ========== */
+    #heartsPhase {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, #ffe8ff, #ffc5f2, #ff9fd9);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 18px 40px;
+      text-align: center;
+      overflow: hidden;
+      z-index: 20;
+      color: #4a0033;
+    }
+
+    .hearts-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    .heart-emoji {
+      position: absolute;
+      top: -40px;
+      font-size: 26px;
+      animation: heartFall 4s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes heartFall {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(110vh); opacity: 0; }
+    }
+
+    .phase-heading {
+      font-family: 'Dancing Script', cursive;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .phase-text {
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 16px;
+    }
+
+    .phase-question {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .phase-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .phase-btn {
+      padding: 8px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    #btnYes {
+      background: #ff2f91;
+      color: #fff;
+    }
+
+    #btnAgain {
+      background: #ffffff;
+      color: #ff2f91;
+      border: 1px solid rgba(255,47,145,0.4);
+    }
+
+    /* ========== INVITE SCREEN ========== */
+    #inviteScreen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, #ffeaf6, #fbefff);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 16px;
+      z-index: 30;
+    }
+
+    .invite-wrapper {
+      text-align: center;
+      max-width: 430px;
+      width: 100%;
+    }
+
+    .envelope-icon {
+      width: 140px;
+      height: 90px;
+      margin: 0 auto 18px;
+      position: relative;
+      background: #ffb3da;
+      border-radius: 12px;
+      box-shadow: 0 10px 18px rgba(255,100,180,0.45);
+      cursor: pointer;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    .envelope-icon::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff9fd9, #ffc4ec);
+      clip-path: polygon(0 0, 50% 60%, 100% 0);
+    }
+
+    .envelope-flap-line {
+      position: absolute;
+      inset: 0;
+      clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.8);
+      border-top: none;
+    }
+
+    .envelope-text {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      font-size: 13px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .invite-card {
+      margin: 0 auto;
+      margin-top: 8px;
+      max-width: 430px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 18px 16px 16px;
+      box-shadow: 0 12px 26px rgba(0,0,0,0.12);
+      text-align: left;
+      opacity: 0;
+      transform: translateY(30px) scale(0.96);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      /* 👉 Scroll fix */
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .invite-wrapper.opened .envelope-icon {
+      transform: translateY(-40px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .invite-wrapper.opened .invite-card {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .invite-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 26px;
+      margin-bottom: 10px;
+      text-align: center;
+      color: #ff2f91;
+    }
+
+    .invite-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #333;
+      margin-bottom: 14px;
+    }
+
+    .invite-footer {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+
+    .invite-footer b {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== SCENE 1: HEAVEN ENTRANCE ========== -->
+<div id="scene1">
+  <!-- CLOUDS -->
+  <div class="cloud"></div><div class="cloud"></div><div class="cloud"></div><div class="cloud"></div>
+  <div class="cloud"></div><div class="cloud"></div><div class="cloud"></div><div class="cloud"></div>
+
+  <!-- DOOR -->
+  <div class="door-wrapper" id="doorArea">
+    <div class="door left" id="leftDoor"></div>
+    <div class="door right" id="rightDoor"></div>
+
+    <div class="knock">Knock&nbsp;Knock 💗</div>
+  </div>
+</div>
+
+<!-- MESSAGE SCREEN (FULL PAGE, SIMPLE) -->
+<div id="messageScreen">
+  <p id="typeText"></p>
+
+  <div id="lightSection">
+    <div class="title">It’s time to turn on the light… ✨</div>
+
+    <div class="switch-box" id="switch">
+      <div class="switch-toggle" id="toggle"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCENE 2: SEARCH PAGE (HIDDEN INITIALLY) ========== -->
+<div id="searchScreen">
+  <div class="wrapper">
+    <!-- Fake Google logo -->
+    <div class="logo">
+      <span>S</span><span>e</span><span>a</span><span>r</span><span>c</span><span>h</span>
+    </div>
+
+    <!-- Search box -->
+    <div class="search-card">
+      <div class="search-icon">🔍</div>
+      <input id="searchInput" type="text" placeholder="Search..." autocomplete="off" />
+      <button class="search-btn" id="searchBtn">Search</button>
+    </div>
+
+    <!-- Hint frame -->
+    <div class="hint-box">
+      <span class="hint-label">Try searching:</span>
+      <span class="hint-text">who is khushi sharma</span>
+    </div>
+
+    <!-- Loading text -->
+    <div class="loading" id="loadingText">Searching…</div>
+
+    <!-- Result card -->
+    <div class="result-area" id="resultArea">
+      <div class="small-label">About</div>
+      <div class="result-title">Who is Khushi Sharma</div>
+      <div class="result-link">you-&-me://khushi-sharma</div>
+
+      <div class="result-snippet" id="snippet">
+        Who is Khushi Sharma? Oh my God, this is my favourite question, because I genuinely love talking about her. She is the most beautiful, smart and funny girl in this entire world, and every single thing about her feels special – because she herself is so incredibly special to me.
+      </div>
+
+      <div class="read-more" id="readMore">Read more ▾</div>
+
+      <ul class="qualities" id="qualities">
+        <li><b>Driven dream-chaser:</b> She is genuinely motivated in life and clear about what she wants, and she keeps moving towards her dreams in her own strong, quiet way.</li>
+        <li><b>Killer sense of humour:</b> The way she explains things, jokes around and talks about life makes everything feel lighter and softer – you can’t help but fall a little more for her every time.</li>
+        <li><b>Her whole personality:</b> She has that rare mix of softness, confidence and charm that makes everyone want to be around her – and honestly, makes people want to steal her away.</li>
+        <li><b>Best storyteller in the universe:</b> Whenever she starts telling a story, it feels more interesting than a Christopher Nolan movie – you just don’t want it to end.</li>
+      </ul>
+
+      <!-- Rating section -->
+      <div id="ratingSection">
+        <div class="rating-title">Rate this 💗</div>
+        <div class="stars" id="starsRow">
+          <span class="star" data-value="1">★</span>
+          <span class="star" data-value="2">★</span>
+          <span class="star" data-value="3">★</span>
+          <span class="star" data-value="4">★</span>
+          <span class="star" data-value="5">★</span>
+        </div>
+        <div class="rating-subtext">Rate this</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup -->
+<div id="popupOverlay">
+  <div class="popup-box">
+    <div class="popup-message" id="popupMessage"></div>
+    <button class="popup-btn" id="popupBtn">Okay</button>
+  </div>
+</div>
+
+<!-- HEARTS PHASE -->
+<div id="heartsPhase">
+  <div class="hearts-bg" id="heartsBg"></div>
+  <div class="phase-heading">Congratulations meri jaan 💖</div>
+  <div class="phase-text">
+    You have unlocked the first phase. I know tum abhi bohot zyada excited ho, 
+    and I want ki tum isi tarah excited raho, because I’m going to try my best 
+    to make 29th your life ka best day.<br><br>
+  </div>
+  <div class="phase-question">
+    So yes cutie pie, once again I’m asking… my princess, would you go on a date with me on 29 November 2025?
+  </div>
+  <div class="phase-buttons">
+    <button class="phase-btn" id="btnYes">Yes</button>
+    <button class="phase-btn" id="btnAgain">Let’s try again</button>
+  </div>
+</div>
+
+<!-- INVITE SCREEN -->
+<div id="inviteScreen">
+  <div class="invite-wrapper" id="inviteWrapper">
+    <div class="envelope-icon" id="envelopeIcon">
+      <div class="envelope-flap-line"></div>
+      <div class="envelope-text">Tap to open 💌</div>
+    </div>
+
+    <div class="invite-card">
+      <div class="invite-title">You’re invited, my princess 💌</div>
+      <div class="invite-body">
+        Official invite for 29 November 2025. Us din sirf tum, mai aur bahut saara fun – 
+        like ek vibe, ek maza, because definitely ye hum dono ke liye new experience hoga 
+        but it would be awesome – bina kisi tension ke, sirf laughs, hugs, dance aur bahut 
+        saara pyaar (cuddles) aur mujhe sirf sex nhi krna aapke sath 😂😂.  
+        Main genuinely chata hu ki aap har moment pe feel ho that you are special, very special 
+        for me mera bacha. So get ready meri jaan, because this date is just for you, 
+        meri favourite insan in the whole universe.
+      </div>
+      <div class="invite-footer">
+        For more information… contact your future husband on WhatsApp<br>
+        <b>9310096117</b><br>
+        Wohi aapko 29 ki ticket denge and card denge,  
+        so unhe message kro please — he’s already missing you. 🥺
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ========== SCENE 1 LOGIC ==========
+  const doorArea = document.getElementById("doorArea");
+  const leftDoor = document.getElementById("leftDoor");
+  const rightDoor = document.getElementById("rightDoor");
+  const messageScreen = document.getElementById("messageScreen");
+
+  doorArea.onclick = () => {
+    leftDoor.style.transform = "rotateY(-90deg)";
+    rightDoor.style.transform = "rotateY(90deg)";
+
+    setTimeout(() => {
+      leftDoor.style.display = "none";
+      rightDoor.style.display = "none";
+
+      messageScreen.style.display = "flex";
+      startTyping();
+    }, 1800);
+  };
+
+  function startTyping() {
+    let text =
+      "Hey my cute little princess…\n" +
+      "I don’t know if words can ever say it perfectly, but this little moment I’m creating is just for you.\n" +
+      "The 29th is coming, and I wanted to give you something a little magical—just like the way you make my heart feel every single day.\n" +
+      "29th ko hum jo time spend karne wale hain… it’s going to be our small escape from everything. Just you and me, in our own tiny heaven.\n" +
+      "And I can’t wait to see your cute face when you read this.\n" +
+      "So… welcome to the beginning of your surprise, my princess. 💗";
+
+    let index = 0;
+    let speed = 35;
+    const typeTextEl = document.getElementById("typeText");
+    typeTextEl.innerText = "";
+
+    function type() {
+      if (index < text.length) {
+        typeTextEl.innerText += text.charAt(index);
+        index++;
+        setTimeout(type, speed);
+      } else {
+        setTimeout(() => {
+          document.getElementById("lightSection").style.display = "flex";
+        }, 1000);
+      }
+    }
+    type();
+  }
+
+  let on = false;
+
+  document.getElementById("switch").onclick = () => {
+    if (!on) {
+      document.getElementById("toggle").style.transform = "translateX(75px)";
+      on = true;
+
+      messageScreen.style.display = "none";
+      document.getElementById("scene1").style.display = "none";
+      document.getElementById("searchScreen").style.display = "flex";
+
+      document.body.classList.add("search-mode");
+    }
+  };
+
+  // ========== SCENE 2: SEARCH LOGIC ==========
+  const input = document.getElementById("searchInput");
+  const btn = document.getElementById("searchBtn");
+  const loading = document.getElementById("loadingText");
+  const resultArea = document.getElementById("resultArea");
+  const readMore = document.getElementById("readMore");
+  const qualities = document.getElementById("qualities");
+  const ratingSection = document.getElementById("ratingSection");
+
+  function handleSearch() {
+    const value = input.value.trim().toLowerCase();
+
+    if (!value) return;
+
+    if (value.includes("who is khushi sharma")) {
+      resultArea.style.display = "none";
+      qualities.style.display = "none";
+      ratingSection.style.display = "none";
+      readMore.textContent = "Read more ▾";
+      loading.style.display = "block";
+      loading.textContent = "Searching…";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+        resultArea.style.display = "block";
+      }, 700);
+    } else {
+      resultArea.style.display = "none";
+      qualities.style.display = "none";
+      ratingSection.style.display = "none";
+      loading.style.display = "block";
+      loading.textContent = 'No results. Try: "who is khushi sharma"';
+      setTimeout(() => {
+        loading.style.display = "none";
+      }, 1200);
+    }
+  }
+
+  btn.addEventListener("click", handleSearch);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleSearch();
+  });
+
+  readMore.addEventListener("click", () => {
+    if (qualities.style.display === "block") {
+      qualities.style.display = "none";
+      ratingSection.style.display = "none";
+      readMore.textContent = "Read more ▾";
+    } else {
+      qualities.style.display = "block";
+      readMore.textContent = "Read less ▴";
+
+      setTimeout(() => {
+        ratingSection.style.display = "block";
+      }, 400);
+    }
+  });
+
+  // ========== POPUP LOGIC ==========
+  const popupOverlay = document.getElementById("popupOverlay");
+  const popupMessage = document.getElementById("popupMessage");
+  const popupBtn = document.getElementById("popupBtn");
+  let currentPopupType = null; // 'five' ya 'sad'
+
+  function showPopup(msg, type) {
+    currentPopupType = type || null;
+    popupMessage.innerText = msg;
+    popupOverlay.style.display = "flex";
+  }
+
+  function hidePopup() {
+    popupOverlay.style.display = "none";
+  }
+
+  popupBtn.addEventListener("click", () => {
+    hidePopup();
+    if (currentPopupType === "five") {
+      showHeartsPhase();
+    }
+  });
+
+  popupOverlay.addEventListener("click", (e) => {
+    if (e.target === popupOverlay) {
+      hidePopup();
+    }
+  });
+
+  // ========== STAR RATING LOGIC ==========
+  const stars = document.querySelectorAll(".star");
+
+  stars.forEach((star) => {
+    star.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const value = parseInt(star.getAttribute("data-value"));
+
+      stars.forEach((s) => {
+        const v = parseInt(s.getAttribute("data-value"));
+        s.style.opacity = v <= value ? "1" : "0.5";
+      });
+
+      if (value === 5) {
+        showPopup("bhdyia chalo aage badhte hai janu", "five");
+      } else {
+        showPopup("are you sure baby 😢😢", "sad");
+      }
+    });
+  });
+
+  ratingSection.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("star")) {
+      showPopup("are you sure baby 😢😢", "sad");
+    }
+  });
+
+  // ========== HEARTS + PHASE LOGIC ==========
+  const heartsPhase = document.getElementById("heartsPhase");
+  const heartsBg = document.getElementById("heartsBg");
+  let heartsInterval = null;
+
+  function startHeartsRain() {
+    const emojis = ["💗","💛","💙","💕","❤️","🩷","🩵"];
+    heartsInterval = setInterval(() => {
+      const span = document.createElement("span");
+      span.className = "heart-emoji";
+      span.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      span.style.left = Math.random() * 100 + "vw";
+      span.style.fontSize = (22 + Math.random() * 12) + "px";
+      heartsBg.appendChild(span);
+
+      setTimeout(() => {
+        span.remove();
+      }, 4000);
+    }, 130);
+  }
+
+  function showHeartsPhase() {
+    heartsPhase.style.display = "flex";
+    startHeartsRain();
+  }
+
+  const btnYes = document.getElementById("btnYes");
+  const btnAgain = document.getElementById("btnAgain");
+
+  btnAgain.addEventListener("click", () => {
+    // pura experience restart -> seedha Knock Knock se
+    window.location.reload();
+  });
+
+  btnYes.addEventListener("click", () => {
+    heartsPhase.style.display = "none";
+    if (heartsInterval) clearInterval(heartsInterval);
+    showInviteScreen();
+  });
+
+  // ========== INVITE SCREEN LOGIC ==========
+  const inviteScreen = document.getElementById("inviteScreen");
+  const inviteWrapper = document.getElementById("inviteWrapper");
+  const envelopeIcon = document.getElementById("envelopeIcon");
+
+  function showInviteScreen() {
+    inviteScreen.style.display = "flex";
+  }
+
+  envelopeIcon.addEventListener("click", () => {
+    inviteWrapper.classList.add("opened");
+  });
+</script>
+
+</body>
+</html>
